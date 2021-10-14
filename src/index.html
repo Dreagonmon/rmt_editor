@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <style>
+            * {
+                box-sizing: border-box;
+                padding: 0;
+                margin: 0;
+            }
+            html, body {
+                width: 100%;
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+            }
+            #save_btn {
+                width: 100%;
+                height: 2rem;
+                flex: 0 0 auto;
+            }
+            #editor_area {
+                width: 100%;
+                flex: 1 1 auto;
+            }
+        </style>
+        <script>
+            window.addEventListener("load", async () => {
+                let resp = await fetch("/api/file/load", {
+                    method: "POST",
+                })
+                let text = await resp.text()
+                document.querySelector("#editor_area").innerHTML = ""
+                document.querySelector("#editor_area").value = text
+            })
+            const save = async () => {
+                let content = document.querySelector("#editor_area").value
+                let resp = await fetch("/api/file/save", {
+                    method: "POST",
+                    body: content,
+                })
+            }
+        </script>
+    </head>
+    <body>
+        <div>
+            <button id="save_btn" onclick="save()">Save</button>
+        </div>
+        <textarea id="editor_area">Loading...</textarea>
+    </body>
+</html>
